@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
 fun BusinessCardScreen() {
     val bg = Color(0xFF0F172A)
     val accent = Color(0xFF38BDF8)
-    val maxContentWidth = 420.dp
+    val maxWidth = 420.dp
 
     Box(
         modifier = Modifier
@@ -52,31 +53,44 @@ fun BusinessCardScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .widthIn(max = maxContentWidth)
+                .widthIn(max = maxWidth)
                 .align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
+            // Chia màn hình 2 phần:
+            // - Profile chiếm nhiều hơn để nằm gần giữa
+            // - Contact chiếm ít hơn ở phía dưới
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1.25f),   // tăng weight => profile nằm gần giữa hơn
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ProfileSection(accent = accent)
+            }
 
-            ProfileSection(accent = accent)
-
-            // đẩy contact xuống dưới nhưng vẫn có khoảng thở
-            Spacer(modifier = Modifier.weight(1f))
-
-            ContactSection()
-
-            Spacer(modifier = Modifier.height(24.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.75f),
+                verticalArrangement = Arrangement.Top
+            ) {
+                ContactSection()
+            }
         }
     }
 }
 
 @Composable
 fun ProfileSection(accent: Color) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Avatar
         Box(
             modifier = Modifier
-                .size(120.dp)
+                .size(125.dp)
                 .clip(CircleShape)
                 .background(Color(0xFF0B1220))
                 .border(2.dp, accent, CircleShape),
@@ -95,7 +109,7 @@ fun ProfileSection(accent: Color) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Trương Tấn Tài",
+            text = "Tài Trương",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White
@@ -119,7 +133,7 @@ fun ContactSection() {
     ) {
         ContactRow(icon = Icons.Filled.Phone, text = "+84 9xx xxx xxx")
         ContactRow(icon = Icons.Filled.Email, text = "tai.truong@email.com")
-        ContactRow(icon = Icons.Filled.Share, text = "github.com/truongtantai1803")
+        ContactRow(icon = Icons.Filled.Share, text = "github.com/yourname")
     }
 }
 
@@ -140,7 +154,7 @@ fun ContactRow(
                 .padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            androidx.compose.material3.Icon(
+            Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = Color(0xFF38BDF8)
